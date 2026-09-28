@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ma liste de Noël</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Gloock&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F3F6F2;
+    --card: #FFFFFF;
+    --ink: #1C2A23;
+    --muted: #5A685F;
+    --line: #DDE4DC;
+    --night: #14392B;
+    --night-2: #1E4D3A;
+    --btn: #1E4D38;
+    --btn-hover: #A52A26;
+    --holly: #B02E2A;
+    --gold: #D8B25A;
+    --medal: #FFFFFF;
+    --shadow: 20, 57, 43;
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1713; --card: #17231D; --ink: #E9EEEA; --muted: #A2AFA7; --line: #27362E;
+      --night: #0C2419; --night-2: #143628; --btn: #2F7A57; --btn-hover: #B8453D;
+      --holly: #E3675F; --gold: #DDB862; --medal: #F2F0EB; --shadow: 0, 0, 0;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1713; --card: #17231D; --ink: #E9EEEA; --muted: #A2AFA7; --line: #27362E;
+    --night: #0C2419; --night-2: #143628; --btn: #2F7A57; --btn-hover: #B8453D;
+    --holly: #E3675F; --gold: #DDB862; --medal: #F2F0EB; --shadow: 0, 0, 0;
+    color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { background: var(--night); scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 400 1rem/1.6 "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- En-tête enneigé ---------- */
+  .hero {
+    position: relative; overflow: hidden; text-align: center; color: #fff;
+    background: radial-gradient(120% 90% at 50% 0%, var(--night-2) 0%, var(--night) 65%);
+    padding: 4.5rem 1.5rem 6.25rem;
+  }
+  .hero-inner { position: relative; z-index: 2; max-width: 38rem; margin: 0 auto; }
+  .star { display: block; width: 2.1rem; height: 2.1rem; margin: 0 auto 1.1rem; }
+  h1 {
+    font-family: "Gloock", "Bodoni 72", Didot, Georgia, serif; font-weight: 400;
+    font-size: clamp(2.9rem, 10vw, 5rem); line-height: 1; letter-spacing: -0.01em;
+    margin: 0 0 1.1rem;
+  }
+  .hero p { margin: 0 auto; max-width: 29rem; font-size: 1.05rem; color: rgba(255,255,255,.82); }
+  .snow { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .flake {
+    position: absolute; top: 0; left: var(--x); width: var(--s); height: 100%;
+    opacity: var(--o); animation: fall var(--t) linear var(--d) infinite; will-change: transform;
+  }
+  .flake::before {
+    content: ""; position: absolute; top: 0; left: 0;
+    width: var(--s); height: var(--s); border-radius: 50%; background: #fff;
+  }
+  @keyframes fall {
+    from { transform: translate3d(0, -6%, 0); }
+    to   { transform: translate3d(var(--dx), 100%, 0); }
+  }
+  .drift { position: absolute; left: 0; bottom: -1px; z-index: 3; display: block; width: 100%; height: 46px; }
+
+  /* ---------- Liste ---------- */
+  main { max-width: 48rem; margin: 0 auto; padding: 2.25rem 1.25rem 3.5rem; }
+  .gifts { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.35rem; }
+  .gift {
+    display: grid; grid-template-columns: 12rem 1fr;
+    background: var(--card); border-radius: 20px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(var(--shadow), .08), 0 22px 40px -28px rgba(var(--shadow), .6);
+  }
+
+  /* Papier cadeau + ruban */
+  .wrap { position: relative; min-height: 12.5rem; display: grid; place-items: center; background-color: var(--paper); }
+  .wrap::before, .wrap::after {
+    content: ""; position: absolute; background: var(--ribbon);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+  }
+  .wrap::before { top: 0; bottom: 0; left: 50%; width: 18px; margin-left: -9px; }
+  .wrap::after { left: 0; right: 0; top: 50%; height: 18px; margin-top: -9px; }
+  .p-dots { background-image: radial-gradient(rgba(255,255,255,.3) 2.2px, transparent 2.8px); background-size: 18px 18px; }
+  .p-stripes { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.16) 0 7px, transparent 7px 16px); }
+  .p-stars {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M10 4L11.47 7.98L15.71 8.15L12.38 10.77L13.53 14.85L10 12.5L6.47 14.85L7.62 10.77L4.29 8.15L8.53 7.98Z' fill='%23E3C06A' fill-opacity='.6'/%3E%3Cpath d='M30 26L31 28.62L33.8 28.76L31.62 30.53L32.35 33.24L30 31.7L27.65 33.24L28.38 30.53L26.2 28.76L29 28.62Z' fill='%23E3C06A' fill-opacity='.45'/%3E%3C/svg%3E");
+    background-size: 40px 40px;
+  }
+  .p-gingham {
+    background-image: linear-gradient(90deg, rgba(255,255,255,.3) 50%, transparent 50%), linear-gradient(rgba(255,255,255,.3) 50%, transparent 50%);
+    background-size: 20px 20px;
+  }
+  .p-pinstripe { background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.26) 0 2px, transparent 2px 11px); }
+
+  .medal {
+    position: relative; z-index: 1; width: 7.25rem; height: 7.25rem; border-radius: 50%;
+    background: var(--medal); display: grid; place-items: center;
+    box-shadow: 0 0 0 5px rgba(255,255,255,.3), 0 10px 22px -10px rgba(0,0,0,.55);
+  }
+  .medal svg { width: 84%; height: 84%; }
+
+  .stamp {
+    position: absolute; z-index: 2; left: 50%; bottom: .9rem;
+    background: #fff; color: #A52A26; border: 2px solid #A52A26; border-radius: 6px;
+    padding: .1rem .6rem; font-weight: 700; font-size: .82rem; white-space: nowrap;
+    opacity: 0; transform: translateX(-50%) rotate(-7deg) scale(.6);
+    transition: opacity .2s, transform .3s cubic-bezier(.2, 1.5, .4, 1);
+  }
+  .gift.done .stamp { opacity: 1; transform: translateX(-50%) rotate(-7deg) scale(1); }
+
+  /* Texte */
+  .body { display: flex; flex-direction: column; gap: .5rem; padding: 1.5rem 1.6rem 1.35rem; min-width: 0; }
+  .gift h2 { font-family: "Gloock", Georgia, serif; font-weight: 400; font-size: 1.5rem; line-height: 1.15; margin: 0; }
+  .desc { margin: 0; color: var(--muted); }
+  .gift h2, .desc { transition: opacity .2s; }
+  .gift.done h2, .gift.done .desc { opacity: .55; }
+  .row {
+    margin-top: auto; padding-top: .85rem;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1rem;
+  }
+  .price { font-family: "Gloock", Georgia, serif; font-size: 1.35rem; line-height: 1; color: var(--holly); white-space: nowrap; }
+  .price.soft { font-family: "Figtree", system-ui, sans-serif; font-size: .98rem; font-weight: 600; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+    background: var(--btn); color: #fff; text-decoration: none;
+    font-weight: 600; font-size: .98rem; line-height: 1;
+    padding: .9rem 1.3rem; border-radius: 999px;
+    transition: background-color .15s;
+  }
+  .btn:hover { background: var(--btn-hover); }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .btn svg { width: 1.1rem; height: 1.1rem; flex: none; }
+
+  .check {
+    position: relative; align-self: flex-start; display: inline-flex; align-items: center; gap: .5rem;
+    margin-top: .35rem; font-size: .9rem; color: var(--muted); cursor: pointer; user-select: none;
+  }
+  .check input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+  .check .box {
+    width: 1.15rem; height: 1.15rem; border-radius: 50%; border: 1.5px solid var(--muted);
+    display: inline-grid; place-items: center; transition: background-color .15s, border-color .15s;
+  }
+  .check input:checked + .box { background: var(--holly); border-color: var(--holly); }
+  .check input:checked + .box::after {
+    content: ""; width: .28rem; height: .55rem; border: solid #fff; border-width: 0 2px 2px 0;
+    transform: translateY(-1px) rotate(45deg);
+  }
+  .check input:focus-visible + .box { outline: 2px solid var(--holly); outline-offset: 2px; }
+
+  footer {
+    margin-top: 2.25rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem;
+    color: var(--muted); font-size: .92rem;
+  }
+  footer strong { color: var(--ink); font-weight: 700; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 3.5rem 1.25rem 5.25rem; }
+    main { padding-top: 1.75rem; }
+    .gift { grid-template-columns: 1fr; }
+    .wrap { min-height: 10.5rem; }
+    .medal { width: 6.5rem; height: 6.5rem; }
+    .body { padding: 1.25rem 1.25rem 1.2rem; }
+    .row .btn { flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flake { animation: none; transform: translate3d(0, var(--y), 0); }
+    .stamp, .btn, .check .box, .gift h2, .desc { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="snow" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <svg class="star" viewBox="4 3.5 12 12" aria-hidden="true"><path d="M10 4L11.47 7.98L15.71 8.15L12.38 10.77L13.53 14.85L10 12.5L6.47 14.85L7.62 10.77L4.29 8.15L8.53 7.98Z" fill="var(--gold)"/></svg>
+    <h1>Ma liste de Noël</h1>
+    <p>Mes envies pour cette année. Chaque bouton ouvre la page du cadeau sur le site de la boutique.</p>
+  </div>
+  <svg class="drift" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 46V26C60 10 120 9 190 22S310 38 380 24 500 6 580 20 720 38 800 22 930 8 1010 22 1140 36 1200 18V46Z" fill="var(--bg)"/>
+  </svg>
+</header>
+
+<main>
+  <ul class="gifts">
+
+    <li class="gift" data-id="parfum">
+      <div class="wrap p-dots" style="--paper:#9E2B2B; --ribbon:#E3C06A">
+        <div class="medal">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <rect x="44" y="24" width="12" height="9" fill="#A7AFB4"/>
+            <rect x="39" y="9" width="22" height="17" rx="3.5" fill="#2A3035"/>
+            <rect x="42.5" y="11.5" width="3" height="12" rx="1.5" fill="#fff" opacity=".22"/>
+            <rect x="23" y="31" width="54" height="58" rx="13" fill="#EFE3C8"/>
+            <path d="M25 54H75V76A11 11 0 0 1 64 87H36A11 11 0 0 1 25 76Z" fill="#C98E3A"/>
+            <rect x="29" y="37" width="5" height="44" rx="2.5" fill="#fff" opacity=".6"/>
+            <rect x="39" y="58" width="22" height="15" rx="2" fill="#FFFDF7"/>
+            <rect x="43.5" y="63" width="13" height="1.8" rx=".9" fill="#2A3035" opacity=".55"/>
+            <rect x="46" y="67" width="8" height="1.5" rx=".75" fill="#2A3035" opacity=".3"/>
+          </svg>
+        </div>
+        <span class="stamp">Déjà offert</span>
+      </div>
+      <div class="body">
+        <h2>Montblanc Explorer, eau de parfum</h2>
+        <p class="desc">Un parfum boisé et cuiré : bergamote, vétiver d'Haïti et patchouli. Plusieurs contenances disponibles.</p>
+        <div class="row">
+          <span class="price soft">Prix selon le format</span>
+          <a class="btn" href="https://www.sephora.fr/p/explorer---eau-de-parfum-537368.html" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+            Voir sur Sephora
+          </a>
+        </div>
+        <label class="check"><input type="checkbox"><span class="box" aria-hidden="true"></span>Déjà offert</label>
+      </div>
+    </li>
+
+    <li class="gift" data-id="affiche">
+      <div class="wrap p-stripes" style="--paper:#2E6A4E; --ribbon:#C23A34">
+        <div class="medal">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M33 27L50 12L67 27" fill="none" stroke="#8A6D3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="50" cy="11.5" r="2.6" fill="#8A6D3B"/>
+            <rect x="21" y="25" width="58" height="64" rx="3" fill="#CFA652"/>
+            <rect x="25" y="29" width="50" height="56" rx="1.5" fill="#B38A3D"/>
+            <rect x="28" y="32" width="44" height="50" fill="#F8F4EA"/>
+            <ellipse cx="50" cy="59" rx="17" ry="14" fill="#E1ECD9"/>
+            <g fill="#8B5A3C">
+              <path d="M50 52C56 52 60.5 57.5 60.5 62C60.5 66 57 67.5 54 66.8C52.4 66.4 51.3 65.8 50 65.8C48.7 65.8 47.6 66.4 46 66.8C43 67.5 39.5 66 39.5 62C39.5 57.5 44 52 50 52Z"/>
+              <ellipse cx="38.6" cy="50.5" rx="3.5" ry="4.5" transform="rotate(-24 38.6 50.5)"/>
+              <ellipse cx="45.3" cy="44.8" rx="3.6" ry="4.8" transform="rotate(-8 45.3 44.8)"/>
+              <ellipse cx="54.7" cy="44.8" rx="3.6" ry="4.8" transform="rotate(8 54.7 44.8)"/>
+              <ellipse cx="61.4" cy="50.5" rx="3.5" ry="4.5" transform="rotate(24 61.4 50.5)"/>
+            </g>
+          </svg>
+        </div>
+        <span class="stamp">Déjà offert</span>
+      </div>
+      <div class="body">
+        <h2>Illustration de l'Épagneul Français</h2>
+        <p class="desc">Illustration façon aquarelle sur papier d'art épais, en carte postale A6, en A5 ou en affiche 30×40&nbsp;cm. Vendue sans cadre.</p>
+        <div class="row">
+          <span class="price">3,90 à 13,90&nbsp;€</span>
+          <a class="btn" href="https://lespetitsgaulois.fr/produit/epagneul-francais/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+            Voir sur Les Petits Gaulois
+          </a>
+        </div>
+        <label class="check"><input type="checkbox"><span class="box" aria-hidden="true"></span>Déjà offert</label>
+      </div>
+    </li>
+
+    <li class="gift" data-id="opinel">
+      <div class="wrap p-stars" style="--paper:#1F3152; --ribbon:#E9ECEF">
+        <div class="medal">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <g transform="rotate(-38 50 50)">
+              <path d="M58 45L93 45Q87 55.5 72 55.8L58 55.8Z" fill="#8C959B"/>
+              <path d="M58 45L93 45Q90 49.5 80 50.2L58 50.2Z" fill="#B9C1C6"/>
+              <path d="M50 43L21 43C13 43 8 46.2 8 50C8 53.8 13 57 21 57L50 57Z" fill="#B98552"/>
+              <path d="M15 48.2C25 46.8 36 47.6 47 46.6" fill="none" stroke="#9C6A3B" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M17 53.2C27 52 37 53.1 47 52.4" fill="none" stroke="#9C6A3B" stroke-width="1.3" stroke-linecap="round"/>
+              <rect x="49" y="41.5" width="10" height="17" rx="2" fill="#A4ADB3"/>
+              <rect x="51.5" y="41.5" width="2" height="17" fill="#fff" opacity=".45"/>
+              <circle cx="55" cy="50" r="1.4" fill="#7E878D"/>
+            </g>
+          </svg>
+        </div>
+        <span class="stamp">Déjà offert</span>
+      </div>
+      <div class="body">
+        <h2>Couteau Opinel Traditionnel, lame carbone</h2>
+        <p class="desc">Le couteau pliant classique, avec son manche en bois et sa lame en acier carbone.</p>
+        <div class="row">
+          <span class="price soft">Prix sur Amazon</span>
+          <a class="btn" href="https://www.amazon.fr/dp/B000UH0RNS" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+            Voir sur Amazon
+          </a>
+        </div>
+        <label class="check"><input type="checkbox"><span class="box" aria-hidden="true"></span>Déjà offert</label>
+      </div>
+    </li>
+
+    <li class="gift" data-id="matcha">
+      <div class="wrap p-gingham" style="--paper:#E3AFA8; --ribbon:#3F7A55">
+        <div class="medal">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <g fill="none" stroke="#A9BBA3" stroke-width="2.4" stroke-linecap="round">
+              <path d="M41 33C36.5 27.5 45.5 23.5 41 16"/>
+              <path d="M56 33C51.5 27.5 60.5 23.5 56 16"/>
+            </g>
+            <rect x="37" y="76" width="26" height="9" rx="2.5" fill="#2B3631"/>
+            <path d="M15 47H85C85 69 70 81 50 81C30 81 15 69 15 47Z" fill="#3B4943"/>
+            <path d="M22 55C24 62 29 69 36 73" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round"/>
+            <ellipse cx="50" cy="47" rx="35" ry="8.5" fill="#2B3631"/>
+            <ellipse cx="50" cy="47" rx="31.5" ry="6.6" fill="#7BA544"/>
+            <ellipse cx="48" cy="46.4" rx="21" ry="3.9" fill="#A6C866"/>
+            <g fill="#D3E4A6">
+              <circle cx="38" cy="46" r="1.3"/><circle cx="44" cy="44.8" r="1"/><circle cx="55" cy="47.2" r="1.2"/><circle cx="60" cy="45.6" r=".9"/>
+            </g>
+          </svg>
+        </div>
+        <span class="stamp">Déjà offert</span>
+      </div>
+      <div class="body">
+        <h2>Matcha Cérémonie 30&nbsp;g</h2>
+        <p class="desc">Matcha japonais 100&nbsp;% Okumidori, récolté dans la préfecture de Mie. Doux et sans amertume.</p>
+        <div class="row">
+          <span class="price">32,90&nbsp;€</span>
+          <a class="btn" href="https://miliamatcha.com/products/milia-matcha-matcha-ceremonie" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+            Voir sur Milia Matcha
+          </a>
+        </div>
+        <label class="check"><input type="checkbox"><span class="box" aria-hidden="true"></span>Déjà offert</label>
+      </div>
+    </li>
+
+    <li class="gift" data-id="madeleines">
+      <div class="wrap p-pinstripe" style="--paper:#CF9F48; --ribbon:#9E2B2B">
+        <div class="medal">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <g transform="translate(11 26) rotate(-16 20 23)">
+              <path d="M20 46C15 46 4 34 2 22C0 10 9 1 20 1C31 1 40 10 38 22C36 34 25 46 20 46Z" fill="#E5AE55" stroke="#C4832F" stroke-width="2" stroke-linejoin="round"/>
+              <g stroke="#C4832F" stroke-width="1.5" stroke-linecap="round" opacity=".75">
+                <path d="M20 42L7.5 25"/><path d="M20 42L10 14"/><path d="M20 42L14.5 7.5"/><path d="M20 42L20 5.5"/><path d="M20 42L25.5 7.5"/><path d="M20 42L30 14"/><path d="M20 42L32.5 25"/>
+              </g>
+            </g>
+            <g transform="translate(49 22) rotate(14 20 23)">
+              <path d="M20 46C15 46 4 34 2 22C0 10 9 1 20 1C31 1 40 10 38 22C36 34 25 46 20 46Z" fill="#E5AE55" stroke="#C4832F" stroke-width="2" stroke-linejoin="round"/>
+              <g stroke="#C4832F" stroke-width="1.5" stroke-linecap="round" opacity=".75">
+                <path d="M20 42L7.5 25"/><path d="M20 42L10 14"/><path d="M20 42L14.5 7.5"/><path d="M20 42L20 5.5"/><path d="M20 42L25.5 7.5"/><path d="M20 42L30 14"/><path d="M20 42L32.5 25"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <span class="stamp">Déjà offert</span>
+      </div>
+      <div class="body">
+        <h2>Plaque 20 madeleinettes en fer blanc</h2>
+        <p class="desc">Moule Gobel fabriqué en France, pour vingt mini-madeleines de 42&nbsp;mm.</p>
+        <div class="row">
+          <span class="price">9,90&nbsp;€</span>
+          <a class="btn" href="https://www.louistellier.fr/plaque-20-madeleinettes-fer-blanc-395-x-125-x-13-mm.html" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+            Voir sur Louis Tellier
+          </a>
+        </div>
+        <label class="check"><input type="checkbox"><span class="box" aria-hidden="true"></span>Déjà offert</label>
+      </div>
+    </li>
+
+  </ul>
+
+  <footer>
+    <span>Déjà offerts : <strong id="count">0</strong> sur 5</span>
+    <span>Prix relevés le 28 septembre 2026, susceptibles de changer.</span>
+  </footer>
+</main>
+
+<script>
+  // Neige
+  (function () {
+    var snow = document.querySelector(".snow");
+    var n = window.innerWidth < 600 ? 34 : 60;
+    for (var i = 0; i < n; i++) {
+      var f = document.createElement("span");
+      var t = Math.random() * 10 + 9;
+      f.className = "flake";
+      f.style.setProperty("--s", (Math.random() * 3.5 + 1.5).toFixed(1) + "px");
+      f.style.setProperty("--x", (Math.random() * 100).toFixed(2) + "%");
+      f.style.setProperty("--o", (Math.random() * 0.5 + 0.35).toFixed(2));
+      f.style.setProperty("--t", t.toFixed(1) + "s");
+      f.style.setProperty("--d", (-Math.random() * t).toFixed(1) + "s");
+      f.style.setProperty("--dx", Math.round((Math.random() - 0.5) * 60) + "px");
+      f.style.setProperty("--y", Math.round(Math.random() * 90) + "%");
+      snow.appendChild(f);
+    }
+  })();
+
+  // Cases « Déjà offert » (mémorisées dans ce navigateur)
+  (function () {
+    var KEY = "liste-noel-coches";
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+    var gifts = document.querySelectorAll(".gift");
+    var countEl = document.getElementById("count");
+    function refresh() {
+      var c = 0;
+      gifts.forEach(function (g) {
+        var on = !!state[g.dataset.id];
+        g.classList.toggle("done", on);
+        if (on) c++;
+      });
+      countEl.textContent = c;
+    }
+    gifts.forEach(function (g) {
+      var box = g.querySelector(".check input");
+      box.checked = !!state[g.dataset.id];
+      box.addEventListener("change", function () {
+        state[g.dataset.id] = box.checked;
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+        refresh();
+      });
+    });
+    refresh();
+  })();
+</script>
+</body>
+</html>
